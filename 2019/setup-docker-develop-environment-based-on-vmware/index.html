@@ -29,7 +29,7 @@
 <meta property="og:site_name" content="Pengyun&#39;s Blog">
 <meta property="og:description" content="宿主机是 Win 10，需要使用 Docker 作为开发环境的话，使用 VMWare 安装 Linux 虚拟机，如 Ubuntu 18 ，然后在虚拟机里面安装 Docker Quick Start虚拟机安装新建虚拟机，基本各种默认就行，网络使用nat 网络设置 设置网段VMWare -&amp;gt; 菜单 -&amp;gt; 编辑 -&amp;gt; 虚拟网络编辑器 中配置子网IP和和子网掩码，点击进去 NAT设置 可">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-05T05:53:39.685Z">
+<meta property="og:updated_time" content="2019-05-05T05:57:24.737Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建基本虚拟机Docker开发环境">
 <meta name="twitter:description" content="宿主机是 Win 10，需要使用 Docker 作为开发环境的话，使用 VMWare 安装 Linux 虚拟机，如 Ubuntu 18 ，然后在虚拟机里面安装 Docker Quick Start虚拟机安装新建虚拟机，基本各种默认就行，网络使用nat 网络设置 设置网段VMWare -&amp;gt; 菜单 -&amp;gt; 编辑 -&amp;gt; 虚拟网络编辑器 中配置子网IP和和子网掩码，点击进去 NAT设置 可">
@@ -85,13 +85,6 @@
               <a href="/tags/">
                 <i class="icon icon-lg icon-tags"></i>
                 标签
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories/">
-                <i class="icon icon-lg icon-th-list"></i>
-                分类
               </a>
             </li>
         
@@ -151,7 +144,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Quick-Start"><span class="post-toc-number">1.</span> <span class="post-toc-text">Quick Start</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#虚拟机安装"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">虚拟机安装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网络设置"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">网络设置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker-和-Docker-Compose-安装"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Docker 和 Docker Compose 安装</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Quick-Start"><span class="post-toc-number">1.</span> <span class="post-toc-text">Quick Start</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#虚拟机安装"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">虚拟机安装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网络设置"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">网络设置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#挂载文件"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">挂载文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Docker-和-Docker-Compose-安装"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">Docker 和 Docker Compose 安装</span></a></li></ol></li></ol>
         </nav>
     </aside>
 
@@ -181,7 +174,17 @@
 <li>配置静态IP<br><code>Ubuntu</code> 中修改 <code>/etc/netplan/50-cloud-init.yaml</code> 配置</li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">network:</span><br><span class="line">    ethernets:</span><br><span class="line">        ens32:</span><br><span class="line">            addresses: [192.168.99.100/24]</span><br><span class="line">            dhcp4: no</span><br><span class="line">            gateway4: 192.168.99.2</span><br><span class="line">            nameservers: </span><br><span class="line">                addresses:</span><br><span class="line">                    - 119.29.29.29</span><br><span class="line">                    - 223.5.5.5</span><br><span class="line">    version: 2</span><br></pre></td></tr></table></figure>
-<p><code>addresses</code> 是要配置的静态IP<br><code>gateway4</code> 是前一步配置的网关IP<br><code>nameservers</code> 下面是 DNS 地址配置，如果SSH连接慢的话，可以试一下将 DNS 的第一项改成前一步的网关IP<br>然后使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">重启网络服务即可。其它系统根据实际不同做相应的配置  </span><br><span class="line">3. Win 10 的网络连接里面，配置 `VMware Network Adapter VMnet8` 的IP，点击`属性` -&gt; `TCP/IPV4` -&gt; `属性`，配置 IP 地址和子网掩码即可</span><br><span class="line"></span><br><span class="line">### 挂载文件</span><br><span class="line"></span><br><span class="line">简单点的可以使用 VMWare 自带的共享文件夹，可参考别的文章，这里使用 `cifs` 方式挂载</span><br><span class="line"></span><br><span class="line">1. Win 10 选择要挂载的文件夹，右键 `属性` -&gt; `共享` ，进去设置一下  </span><br><span class="line">2. Ubuntu 里面修改 `/etc/fstab` 添加一条挂载设置</span><br><span class="line">``` bash</span><br><span class="line">//192.168.99.1/workspace   /work   cifs   vers=2.1,username=myname,password=mypwd,file_mode=0777,dir_mode=0777,noperm 0 0</span><br></pre></td></tr></table></figure></p>
+<p><code>addresses</code> 是要配置的静态IP<br><code>gateway4</code> 是前一步配置的网关IP<br><code>nameservers</code> 下面是 DNS 地址配置，如果SSH连接慢的话，可以试一下将 DNS 的第一项改成前一步的网关IP<br>然后使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br></pre></td></tr></table></figure></p>
+<p>重启网络服务即可。其它系统根据实际不同做相应的配置  </p>
+<ol start="3">
+<li>Win 10 的网络连接里面，配置 <code>VMware Network Adapter VMnet8</code> 的IP，点击<code>属性</code> -&gt; <code>TCP/IPV4</code> -&gt; <code>属性</code>，配置 IP 地址和子网掩码即可</li>
+</ol>
+<h3 id="挂载文件"><a href="#挂载文件" class="headerlink" title="挂载文件"></a>挂载文件</h3><p>简单点的可以使用 VMWare 自带的共享文件夹，可参考别的文章，这里使用 <code>cifs</code> 方式挂载</p>
+<ol>
+<li>Win 10 选择要挂载的文件夹，右键 <code>属性</code> -&gt; <code>共享</code> ，进去设置一下  </li>
+<li>Ubuntu 里面修改 <code>/etc/fstab</code> 添加一条挂载设置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//192.168.99.1/workspace   /work   cifs   vers=2.1,username=myname,password=mypwd,file_mode=0777,dir_mode=0777,noperm 0 0</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 <p>这些配置的意思是：</p>
 <ul>
 <li>192.168.99.1：网络设置第3步为宿主机设置的IP</li>
@@ -200,7 +203,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2019-05-05T05:53:39.685Z" itemprop="dateUpdated">2019-05-05 13:53:39</time>
+    最后更新时间：<time datetime="2019-05-05T05:57:24.737Z" itemprop="dateUpdated">2019-05-05 13:57:24</time>
 </span><br>
 
 
