@@ -4,27 +4,6 @@
   
     
     <entry>
-      <title>搭建虚拟机Docker开发环境</title>
-      <link href="/2019/setup-docker-develop-environment-based-on-vmware/"/>
-      <url>/2019/setup-docker-develop-environment-based-on-vmware/</url>
-      
-        <content type="html"><![CDATA[<p>宿主机是 Win 10，需要使用 Docker 作为开发环境的话，使用 VMWare 安装 Linux 虚拟机，如 Ubuntu 18 ，然后在虚拟机里面安装 Docker</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="虚拟机安装"><a href="#虚拟机安装" class="headerlink" title="虚拟机安装"></a>虚拟机安装</h3><p>新建虚拟机，基本各种默认就行，网络使用nat</p><h3 id="网络设置"><a href="#网络设置" class="headerlink" title="网络设置"></a>网络设置</h3><ol><li>设置网段<br><code>VMWare</code> -&gt; <code>菜单</code> -&gt; <code>编辑</code> -&gt; <code>虚拟网络编辑器</code> 中配置子网IP和和子网掩码，点击进去 <code>NAT设置</code> 可配置网关IP</li><li>配置静态IP<br><code>Ubuntu</code> 中修改 <code>/etc/netplan/50-cloud-init.yaml</code> 配置</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">network:</span><br><span class="line">    ethernets:</span><br><span class="line">        ens32:</span><br><span class="line">            addresses: [192.168.99.100/24]</span><br><span class="line">            dhcp4: no</span><br><span class="line">            gateway4: 192.168.99.2</span><br><span class="line">            nameservers: </span><br><span class="line">                addresses:</span><br><span class="line">                    - 119.29.29.29</span><br><span class="line">                    - 223.5.5.5</span><br><span class="line">    version: 2</span><br></pre></td></tr></table></figure><p><code>addresses</code> 是要配置的静态IP<br><code>gateway4</code> 是前一步配置的网关IP<br><code>nameservers</code> 下面是 DNS 地址配置，如果SSH连接慢的话，可以试一下将 DNS 的第一项改成前一步的网关IP<br>然后使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br></pre></td></tr></table></figure></p><p>重启网络服务即可。其它系统根据实际不同做相应的配置  </p><ol start="3"><li>Win 10 的网络连接里面，配置 <code>VMware Network Adapter VMnet8</code> 的IP，点击<code>属性</code> -&gt; <code>TCP/IPV4</code> -&gt; <code>属性</code>，配置 IP 地址和子网掩码即可</li></ol><h3 id="挂载文件"><a href="#挂载文件" class="headerlink" title="挂载文件"></a>挂载文件</h3><p>简单点的可以使用 VMWare 自带的共享文件夹，可参考别的文章，这里使用 <code>cifs</code> 方式挂载</p><ol><li>Win 10 选择要挂载的文件夹，右键 <code>属性</code> -&gt; <code>共享</code> ，进去设置一下  </li><li>Ubuntu 里面修改 <code>/etc/fstab</code> 添加一条挂载设置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//192.168.99.1/workspace   /work   cifs   vers=2.1,username=myname,password=mypwd,file_mode=0777,dir_mode=0777,noperm 0 0</span><br></pre></td></tr></table></figure></li></ol><p>这些配置的意思是：</p><ul><li>192.168.99.1：网络设置第3步为宿主机设置的IP</li><li>workspace：Win 10 里面要挂载的、被共享的文件夹名称</li><li>/work：共享文件夹被映射到 Linux 中的这个路径</li><li>myname 和 mypwd：Win 10 的用户名和密码</li><li>其它的是一些文件夹权限的设置  </li></ul><p>请根据实际情况修改<br>运行指令 <code>mount -a</code>，正常的话文件夹就被挂载进来了，这里可能需要根据提示装一些挂载格式支持的软件。重启虚拟机，文件夹会自动挂载，不用每次都跑这条命令。</p><h3 id="Docker-和-Docker-Compose-安装"><a href="#Docker-和-Docker-Compose-安装" class="headerlink" title="Docker 和 Docker Compose 安装"></a>Docker 和 Docker Compose 安装</h3><p>根据文档来就行</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> Docker </tag>
-            
-            <tag> VMWare </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Spring Boot + Jaeger 搭建使用</title>
       <link href="/2019/jaeger-deploy-with-spring-boot/"/>
       <url>/2019/jaeger-deploy-with-spring-boot/</url>
@@ -38,6 +17,27 @@
             <tag> Spring Boot </tag>
             
             <tag> Jaeger </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>搭建虚拟机Docker开发环境</title>
+      <link href="/2019/setup-docker-develop-environment-based-on-vmware/"/>
+      <url>/2019/setup-docker-develop-environment-based-on-vmware/</url>
+      
+        <content type="html"><![CDATA[<p>宿主机是 Win 10，需要使用 Docker 作为开发环境的话，使用 VMWare 安装 Linux 虚拟机，如 Ubuntu 18 ，然后在虚拟机里面安装 Docker</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="虚拟机安装"><a href="#虚拟机安装" class="headerlink" title="虚拟机安装"></a>虚拟机安装</h3><p>新建虚拟机，基本各种默认就行，网络使用nat</p><h3 id="网络设置"><a href="#网络设置" class="headerlink" title="网络设置"></a>网络设置</h3><ol><li>设置网段<br><code>VMWare</code> -&gt; <code>菜单</code> -&gt; <code>编辑</code> -&gt; <code>虚拟网络编辑器</code> 中配置子网IP和和子网掩码，点击进去 <code>NAT设置</code> 可配置网关IP</li><li>配置静态IP<br><code>Ubuntu</code> 中修改 <code>/etc/netplan/50-cloud-init.yaml</code> 配置</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">network:</span><br><span class="line">    ethernets:</span><br><span class="line">        ens32:</span><br><span class="line">            addresses: [192.168.99.100/24]</span><br><span class="line">            dhcp4: no</span><br><span class="line">            gateway4: 192.168.99.2</span><br><span class="line">            nameservers: </span><br><span class="line">                addresses:</span><br><span class="line">                    - 119.29.29.29</span><br><span class="line">                    - 223.5.5.5</span><br><span class="line">    version: 2</span><br></pre></td></tr></table></figure><p><code>addresses</code> 是要配置的静态IP<br><code>gateway4</code> 是前一步配置的网关IP<br><code>nameservers</code> 下面是 DNS 地址配置，如果SSH连接慢的话，可以试一下将 DNS 的第一项改成前一步的网关IP<br>然后使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netplan apply</span><br></pre></td></tr></table></figure></p><p>重启网络服务即可。其它系统根据实际不同做相应的配置  </p><ol start="3"><li>Win 10 的网络连接里面，配置 <code>VMware Network Adapter VMnet8</code> 的IP，点击<code>属性</code> -&gt; <code>TCP/IPV4</code> -&gt; <code>属性</code>，配置 IP 地址和子网掩码即可</li></ol><h3 id="挂载文件"><a href="#挂载文件" class="headerlink" title="挂载文件"></a>挂载文件</h3><p>简单点的可以使用 VMWare 自带的共享文件夹，可参考别的文章，这里使用 <code>cifs</code> 方式挂载</p><ol><li>Win 10 选择要挂载的文件夹，右键 <code>属性</code> -&gt; <code>共享</code> ，进去设置一下  </li><li>Ubuntu 里面修改 <code>/etc/fstab</code> 添加一条挂载设置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//192.168.99.1/workspace   /work   cifs   vers=2.1,username=myname,password=mypwd,file_mode=0777,dir_mode=0777,noperm 0 0</span><br></pre></td></tr></table></figure></li></ol><p>这些配置的意思是：</p><ul><li>192.168.99.1：网络设置第3步为宿主机设置的IP</li><li>workspace：Win 10 里面要挂载的、被共享的文件夹名称</li><li>/work：共享文件夹被映射到 Linux 中的这个路径</li><li>myname 和 mypwd：Win 10 的用户名和密码</li><li>其它的是一些文件夹权限的设置  </li></ul><p>请根据实际情况修改<br>运行指令 <code>mount -a</code>，正常的话文件夹就被挂载进来了，这里可能需要根据提示装一些挂载格式支持的软件。重启虚拟机，文件夹会自动挂载，不用每次都跑这条命令。</p><h3 id="Docker-和-Docker-Compose-安装"><a href="#Docker-和-Docker-Compose-安装" class="headerlink" title="Docker 和 Docker Compose 安装"></a>Docker 和 Docker Compose 安装</h3><p>根据文档来就行</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Docker </tag>
+            
+            <tag> VMWare </tag>
             
         </tags>
       
