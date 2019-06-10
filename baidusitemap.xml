@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://pyun.top/2019/running-hive-on-spark/</loc>
+    <lastmod>2019-06-10</lastmod>
+  </url>  <url>
     <loc>https://pyun.top/2019/jaeger-deploy-with-spring-boot/</loc>
     <lastmod>2019-05-06</lastmod>
   </url>  <url>
