@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://pyun.top/2020/hyperf-db-connection/</loc>
+    
+    <lastmod>2020-10-18T00:16:37.674Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://pyun.top/2019/running-hive-on-spark/</loc>
     
     <lastmod>2019-06-11T06:46:59.981Z</lastmod>
